@@ -1,170 +1,199 @@
 # 🙏 Remedy Setu — AI Remedy Assistant
 
-An AI-powered Vedic astrology remedy assistant that recommends gemstones, rudraksha, and puja services based on a user's birth details and life concerns.
+[![React](https://img.shields.io/badge/React-18-blue.svg)](https://react.dev/)
+[![Express](https://img.shields.io/badge/Express-4.21-green.svg)](https://expressjs.com/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.3-38B2AC.svg)](https://tailwindcss.com/)
+[![Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%201.5%20Flash-orange.svg)](https://aistudio.google.com/)
 
-> Built as a Full Stack Intern assignment for [Remedy Setu](https://remedysetu.com)
+An AI-powered Vedic astrology remedy assistant built for **Remedy Setu**. It recommends authentic gemstones, rudraksha beads, and puja services strictly from a curated 18-item product catalogue based on a user's birth details and life concerns, complete with astrological reasoning in **Hindi and English**.
+
+> **Assignment Role**: Software Development Intern (Full Stack)  
+> **Company**: Remedy Setu (D A Dharm Sathi Pvt. Ltd.)  
+> **Option Chosen**: Option 2 — AI Remedy Assistant (AI)
 
 ---
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Personalized Consultation**: Enter birth details (name, DOB, gender) and select a concern (Career, Marriage, Health, Finance)
-- **AI-Powered Recommendations**: Google Gemini AI suggests remedies strictly from a curated product catalogue (18 items)
-- **Bilingual Support**: Responses in English or Hindi (simple, accessible language)
-- **Product Catalogue**: Browse all gemstones, rudraksha beads, and puja services with prices
-- **Consultation History**: View past consultations and recommendations
-- **Mobile-First Design**: Beautiful, responsive UI with warm spiritual aesthetics
-- **Constrained AI**: The AI NEVER recommends products outside the catalogue — strict prompt engineering ensures accuracy
+- **Personalized Consultation Wizard**: 3-step animated flow capturing Name, Date of Birth, Gender, optional Birth Time & Place, Life Concern, and Language preference.
+- **Strictly Catalogue-Bound AI**: Google Gemini AI is constrained by strict prompt rules (`temperature: 0.3`) and programmatic post-processing to ensure it **never recommends products outside the 18-item catalogue** or invents prices.
+- **Bilingual Explanations**: Rich explanations in simple **Hindi** or **English**, connecting the user's concern to planetary influences (Saturn, Jupiter, Mercury, Sun, Rahu, etc.).
+- **Product Catalogue Explorer**: Full searchable and categorised view (`/products`) with filter tabs (*Gemstones*, *Rudraksha*, *Puja Services*) and real-time search.
+- **Consultation History Timeline**: Tracks past consultations (`/history`) with expandable cards and recommendation summaries.
+- **Zero-Config Resilience**: Automatic **Vedic Rule Engine Fallback** ensures the entire application runs smoothly out-of-the-box even without a Gemini API key or MongoDB instance.
+- **Mobile-First Spiritual UI**: Designed with warm saffron/amber palettes, smooth Framer Motion page transitions, and toast alerts.
+
+---
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Vite, Tailwind CSS, Framer Motion |
-| Backend | Node.js, Express.js |
-| Database | MongoDB (with Mongoose ODM) |
-| AI | Google Gemini API (gemini-1.5-flash) |
-| Deployment | Vercel (frontend) + Render (backend) |
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | React 18, Vite | Fast SPA development & instant HMR |
+| **Styling & Motion** | Tailwind CSS, Framer Motion | Spiritual warm theme & smooth step transitions |
+| **Icons & Feedback** | React Icons, React Hot Toast | Visual feedback and rich iconography |
+| **Backend** | Node.js, Express.js | REST API & AI orchestration |
+| **Database** | MongoDB + Mongoose (with In-Memory Fallback) | Consultation history & catalogue persistence |
+| **AI Model** | Google Gemini 1.5 Flash (`@google/generative-ai`) | Constrained astrological reasoning |
+| **Security** | Helmet, CORS, Express Rate Limit | API protection & abuse prevention |
+
+---
 
 ## 📂 Project Structure
 
-```
+```text
 remedy-setu-ai/
-├── client/                 # React frontend
+├── client/                     # Vite + React Frontend
 │   ├── src/
-│   │   ├── components/     # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── api/            # API client
-│   │   ├── App.jsx         # Main app with routing
-│   │   └── main.jsx        # Entry point
+│   │   ├── api/index.js        # Axios client with centralized endpoints
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx           # Responsive header with branding
+│   │   │   ├── Footer.jsx           # Footer with links
+│   │   │   ├── ConsultationForm.jsx # 3-step interactive consultation wizard
+│   │   │   ├── RemedyResult.jsx     # AI analysis & recommended remedies card
+│   │   │   └── ProductCard.jsx      # Reusable product card with stock badges
+│   │   ├── pages/
+│   │   │   ├── ProductsPage.jsx     # Searchable 18-item catalogue
+│   │   │   └── HistoryPage.jsx      # Consultation history timeline
+│   │   ├── App.jsx             # React router setup & toast provider
+│   │   └── main.jsx            # React root
 │   ├── index.html
 │   ├── tailwind.config.js
+│   ├── vercel.json             # 1-click Vercel SPA rewrite
 │   └── vite.config.js
-├── server/                 # Express backend
-│   ├── config/             # Database configuration
-│   ├── controllers/        # Business logic
-│   ├── models/             # Mongoose schemas
-│   ├── routes/             # API routes
-│   ├── middleware/         # Error handling
+├── server/                     # Express Backend
+│   ├── config/db.js            # MongoDB connection with graceful fallback
+│   ├── controllers/
+│   │   ├── consultationController.js # AI prompt engineering & validation
+│   │   └── productController.js      # Filtered catalogue API
 │   ├── data/
-│   │   └── catalogue.json  # Product catalogue (18 items)
-│   └── server.js           # Entry point
+│   │   └── catalogue.json      # 18 curated items (Gemstones, Rudraksha, Pujas)
+│   ├── middleware/errorHandler.js # Global error handler
+│   ├── models/
+│   │   ├── Consultation.js     # Mongoose consultation schema
+│   │   └── Product.js          # Mongoose product schema
+│   ├── routes/api.js           # REST endpoints
+│   ├── server.js               # Express server entry point
+│   └── .env.example
+├── package.json                # Root convenience scripts
 ├── .gitignore
 └── README.md
 ```
 
-## 🚀 Setup & Run Locally
+---
 
-### Prerequisites
-- Node.js 18+ installed
-- MongoDB running locally OR a MongoDB Atlas URI
-- Google Gemini API key ([Get one free](https://aistudio.google.com/apikey))
+## ⚡ Quick Start (< 2 Minutes)
 
-### 1. Clone the Repository
+You can run the entire application locally without needing MongoDB or paid API keys.
+
+### 1. Clone the repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/remedy-setu-ai.git
 cd remedy-setu-ai
 ```
 
-### 2. Setup Backend
+### 2. Install dependencies
+```bash
+npm run install:all
+```
+*(Or run `cd server && npm install` then `cd ../client && npm install`)*
+
+### 3. Start the Backend
 ```bash
 cd server
-npm install
-
-# Create environment file
-cp .env.example .env
-# Edit .env and add your keys:
-#   GEMINI_API_KEY=your_gemini_api_key_here
-#   MONGODB_URI=mongodb://localhost:27017/remedy-setu  (or your Atlas URI)
-
-# Start the server
 npm run dev
 ```
-The backend starts on `http://localhost:5000`
+> The server runs on `http://localhost:5000`. By default, it operates in in-memory mode with 18 pre-loaded catalogue products.
 
-### 3. Setup Frontend
+*(Optional)* To use live Gemini AI, add your API key in `server/.env`:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 4. Start the Frontend
+In another terminal:
 ```bash
 cd client
-npm install
 npm run dev
 ```
-The frontend starts on `http://localhost:5173`
-
-### 4. Open the App
-Visit `http://localhost:5173` in your browser.
-
-> **Note**: The app works even without MongoDB — it falls back to in-memory storage. You only need the Gemini API key for AI recommendations.
-
-## 📋 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/consultation` | Submit birth details & get AI remedy |
-| GET | `/api/consultations` | Get consultation history |
-| GET | `/api/products` | Get all products (filter: `?category=&concern=`) |
-| GET | `/api/products/:id` | Get single product details |
-
-### Sample Request — Get Remedy
-```json
-POST /api/consultation
-{
-  "userName": "Rahul",
-  "dateOfBirth": "1995-03-15",
-  "gender": "Male",
-  "concern": "career",
-  "language": "en",
-  "additionalDetails": "Facing issues with job stability"
-}
-```
-
-## 🎨 Design Decisions
-
-1. **Multi-step Wizard**: The consultation form uses a step-by-step wizard (birth details → concern → language → submit) for a clean, guided experience
-2. **Strict AI Prompting**: The Gemini prompt includes the full catalogue and explicit instructions to only recommend from it. Temperature is set to 0.3 for consistency
-3. **Bilingual**: Hindi/English support as most Remedy Setu customers are Hindi-speaking
-4. **Product Catalogue**: 18 curated items (7 gemstones, 4 rudraksha, 7 pujas) with realistic Indian market prices
-5. **Fallback Storage**: In-memory arrays when MongoDB is unavailable — ensures the demo always works
-
-## 🔮 Product Catalogue Overview
-
-- **Gemstones (7)**: Neelam, Pukhraj, Manik, Panna, Gomed, Lehsunia, Moti — ₹2,500 to ₹21,000
-- **Rudraksha (4)**: 1 Mukhi, 5 Mukhi, 7 Mukhi, Gauri Shankar — ₹800 to ₹15,000
-- **Puja Services (7)**: Navgraha Shanti, Mahamrityunjaya, Kaal Sarp Dosh, Vivah, Lakshmi, Brihaspati, Surya Puja — ₹1,100 to ₹11,000
-
-## ✅ Features Done
-
-- [x] Multi-step consultation form with smooth animations
-- [x] AI remedy recommendations (Gemini API)
-- [x] Product catalogue with category filtering
-- [x] Consultation history
-- [x] Bilingual (Hindi + English)
-- [x] Mobile-responsive design
-- [x] Error handling & loading states
-- [x] In-memory fallback (no MongoDB required)
-- [x] Rate limiting & security headers
-
-## 🔜 What I'd Add Next (with more time)
-
-- [ ] User authentication (login/signup)
-- [ ] WhatsApp integration for sharing recommendations
-- [ ] Product images from actual inventory
-- [ ] Payment integration for purchasing recommended products
-- [ ] Admin dashboard with analytics
-- [ ] PDF export of consultation reports
-- [ ] Push notifications for follow-up consultations
-
-## 🔒 AI Safety & Constraints
-
-The AI prompt enforces:
-- **Catalogue-only**: Will never recommend products not in our catalogue
-- **No medical advice**: Explicitly disclaims — remedies are spiritual, not medical
-- **Honest pricing**: Always shows actual catalogue prices
-- **No fabrication**: Temperature 0.3 + structured output + validation
-
-## 📝 License
-
-Built for the Remedy Setu internship assignment. Not for commercial use.
+Open **[http://localhost:3000](http://localhost:3000)** in your browser!
 
 ---
 
-*Built with ❤️ using React, Express, MongoDB, and Google Gemini AI*
+## 🔒 How We Enforce AI Safety & Prevent Hallucination
+
+The assignment specifically evaluates **"how you stop the AI from giving wrong outputs (such as invented products or prices)"**. Here is our multi-layered approach:
+
+1. **System Prompt Injection**: The full 18-item catalogue (IDs, names, prices, categories, benefits) is injected directly into the system instruction. The prompt explicitly orders:
+   > *"ONLY recommend products that exist in the PRODUCT CATALOGUE below. You must reference them by their exact 'id' field. If no product fits, say so honestly — NEVER invent a product or price."*
+2. **Low Temperature (`temperature: 0.3`)**: Reduces model variance and prevents creative fabrication of items.
+3. **Structured JSON Mode**: Forces Gemini to output pure JSON adhering strictly to our schema.
+4. **Post-Processing Validation Filter**: In `server/controllers/consultationController.js`, before responding to the user, every recommended product ID returned by the AI is cross-checked against the catalogue map:
+   ```javascript
+   aiResponse.recommendations = aiResponse.recommendations.filter((rec) => {
+     if (!catalogueMap.has(rec.productId)) {
+       console.warn(`Filtered out hallucinated product: ${rec.productId}`);
+       return false;
+     }
+     return true;
+   });
+   ```
+5. **Catalogue-Direct Pricing**: The frontend pulls official prices directly from `catalogue.json` rather than relying on the AI model for monetary numbers.
+
+---
+
+## 📋 API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/consultation` | Takes birth details & concern, returns AI remedy & products |
+| `GET` | `/api/consultations` | Returns past consultation history |
+| `GET` | `/api/products` | Lists catalogue items (filters: `?category=Gemstones&search=neelam`) |
+| `GET` | `/api/products/:id` | Returns single product details |
+| `GET` | `/health` | Server health check and DB connection status |
+
+### Sample Request:
+```bash
+curl -X POST http://localhost:5000/api/consultation \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "Aarav Sharma",
+    "dateOfBirth": "1996-08-12",
+    "gender": "male",
+    "concern": "career",
+    "language": "en"
+  }'
+```
+
+---
+
+## 🎁 Bonus Items Attempted
+
+- [x] **100% Bilingual Support**: Complete Hindi & English UI and AI generation with Devanagari font rendering (`Noto Sans Devanagari`).
+- [x] **Zero-Downtime Vedic Engine Fallback**: Guarantees working product even when offline or unauthenticated.
+- [x] **Hallucination Interceptor**: Rejects any product IDs not present in verified catalogue.
+- [x] **Real-time Catalogue Search & Category Filtering**: Debounced search across names, Hindi names, and descriptions.
+- [x] **Consultation History Timeline**: Tracks past advice with responsive card expansion.
+- [x] **Security Middleware**: Express rate limiting (30 requests/min for consultations) and Helmet HTTP headers.
+
+---
+
+## 🔮 What I Would Add With One More Week
+
+1. **WhatsApp One-Click Sharing**: Enable users and partner astrologers to instantly forward remedy consultations directly via WhatsApp Web/API.
+2. **Kundali Chart Rendering (Lagna Chart)**: Generate an SVG South/North Indian horoscope chart alongside the textual analysis.
+3. **Checkout & Puja Booking Integration**: Direct payment gateway (Razorpay) to purchase recommended gemstones or book temple pujas.
+4. **Astrologer Partner Portal**: Login-protected interface where astrologers can edit and customize recommendations for their clients before sending.
+
+---
+
+## 📄 Submission Checklist
+
+- [x] **Working Product**: Tested end-to-end locally on port 3000 & 5000.
+- [x] **Clean GitHub Repository**: No API keys committed (`.env` in `.gitignore`), clean commits.
+- [x] **README Documentation**: Setup in < 2 minutes, tech stack, API reference, safety constraints.
+- [x] **Video Walkthrough Script**: Provided in project docs for recording.
+
+---
+
+*Built with ❤️ for Remedy Setu*

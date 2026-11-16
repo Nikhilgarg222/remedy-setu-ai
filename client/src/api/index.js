@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// In development, target http://localhost:5000/api directly or use env var
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -32,7 +35,9 @@ export const getProducts = async (filters = {}) => {
   if (filters.search) {
     params.append('search', filters.search);
   }
-  const response = await api.get(`/products?${params.toString()}`);
+  const query = params.toString();
+  const endpoint = query ? `/products?${query}` : '/products';
+  const response = await api.get(endpoint);
   return response.data;
 };
 
